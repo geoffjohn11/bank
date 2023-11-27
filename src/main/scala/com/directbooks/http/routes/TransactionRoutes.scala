@@ -36,8 +36,8 @@ class TransactionRoutes[F[_]: Concurrent] private (
 
   def validBalance(balance: BigDecimal, tInfo: TransactionInfo) = {
     tInfo.description match {
-      case "withdrawl" if tInfo.amount.compareTo(balance) <= 0 => true
-      case "withdrawl" => false
+      case "withdrawal" if tInfo.amount.compareTo(balance) <= 0 => true
+      case "withdrawal" => false
       case _ => true
     }
   }
@@ -45,7 +45,7 @@ class TransactionRoutes[F[_]: Concurrent] private (
     def updateAccount(account: Account, tInfo: TransactionInfo) = {
       tInfo.description match{
         case "deposit" =>  accounts.update(account.id, account.balance + tInfo.amount)
-        case "withdrawl" =>  accounts.update(account.id, account.balance - tInfo.amount)
+        case "withdrawal" =>  accounts.update(account.id, account.balance - tInfo.amount)
       }
     }
 
@@ -83,17 +83,17 @@ class TransactionRoutes[F[_]: Concurrent] private (
     for {
       tInfo <- req.as[TransactionInfo]
       res <- tInfo.description match {
-      case "withdrawl" | "deposit" =>
+      case "withdrawal" | "deposit" =>
          for{
            account <- accounts.find(tInfo.accountId).transact(xa)
            resp <- account.fold(NotFound("Account does not exist")) { _ =>
              transactionTransfer(tInfo).flatMap {
-               case Nil => UnprocessableEntity("Withdrawl exceeds balance")
+               case Nil => UnprocessableEntity("Withdrawal exceeds balance")
                case details => Created(details.headOption.toList.asJson)
              }
            }
          }  yield resp
-      case desc => BadRequest(s"transaction description must be either 'withdrawl' or 'deposit', input was [${desc}]")
+      case desc => BadRequest(s"transaction description must be either 'withdrawal' or 'deposit', input was [${desc}]")
     }
     } yield res
   }

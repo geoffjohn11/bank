@@ -1,10 +1,10 @@
 # Bank App
 
-App that supports banking withdrawl and deposit operations to an account.  The implementation uses the Typelevel stack, including
+App that supports banking withdrawal and deposit operations to an account.  The implementation uses the Typelevel stack, including
 Cats, CatsEffect, Http4s, and doobie
 
 The app supports two operations against an account:
-```withdrawl``` and ```deposit```
+```withdrawal``` and ```deposit```
 
 ## Description
 The application itself is stateless, all state is maintained in a postgres database.  The ACID compliant database provides strong
@@ -37,7 +37,7 @@ http://localhost:8080/directbooks/transaction with a body payload
 {
 	"accountId": 44,
 	"amount": 200,
-	"description": "withdrawl"
+	"description": "withdrawal"
 }
 ```
 * response payload:
@@ -47,7 +47,7 @@ http://localhost:8080/directbooks/transaction with a body payload
 		"id": 1,
 		"accountId": 44,
 		"amount": 200,
-		"transfer": "withdrawl",
+		"transfer": "withdrawal",
 		"status": "success",
 		"date": 1701049151121
 	}
@@ -59,7 +59,7 @@ with body payload
 {
 	"accountId": 44,
 	"amount": 301,
-	"description": "withdrawl"
+	"description": "withdrawal"
 }
 ```
 
@@ -71,7 +71,7 @@ with body payload
 		"id": 1,
 		"accountId": 44,
 		"amount": 200,
-		"transfer": "withdrawl",
+		"transfer": "withdrawal",
 		"status": "success",
 		"date": 1701049151121
 	},
@@ -79,7 +79,7 @@ with body payload
 		"id": 2,
 		"accountId": 44,
 		"amount": 301,
-		"transfer": "withdrawl",
+		"transfer": "withdrawal",
 		"status": "failed",
 		"date": 1701049571660
 	}

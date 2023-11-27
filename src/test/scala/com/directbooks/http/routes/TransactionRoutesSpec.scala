@@ -41,14 +41,14 @@ class TransactionRoutesSpec extends AsyncFreeSpec with AsyncIOSpec with Matchers
 
 
   "TransactionRoutes" - {
-    "should return entity if transaction details if withdrawl amount is less or equal to than balance" in {
+    "should return entity if transaction details if withdrawal amount is less or equal to than balance" in {
       transactor.use{ xa =>
         for {
           lt <- LiveTransaction[IO](xa)
           la <- LiveAccount[IO](xa)
           route = TransactionRoutes[IO](la, lt, xa)
           response <- route.routes.orNotFound.run(
-            Request(method = Method.POST, uri = uri"/transaction").withEntity(withdrawlFixture.copy(amount = BigDecimal(5)))
+            Request(method = Method.POST, uri = uri"/transaction").withEntity(withdrawalFixture.copy(amount = BigDecimal(5)))
           )
           retrieved <- response.as[List[Transaction]]
         } yield {
@@ -59,19 +59,19 @@ class TransactionRoutesSpec extends AsyncFreeSpec with AsyncIOSpec with Matchers
         }
       }
     }
-    "should return unprocessable entity if withdrawl exceeds balance" in {
+    "should return unprocessable entity if withdrawal exceeds balance" in {
       transactor.use { xa =>
         for {
           lt <- LiveTransaction[IO](xa)
           la <- LiveAccount[IO](xa)
           route = TransactionRoutes[IO](la, lt, xa)
           response <- route.routes.orNotFound.run(
-            Request(method = Method.POST, uri = uri"/transaction").withEntity(withdrawlFixture)
+            Request(method = Method.POST, uri = uri"/transaction").withEntity(withdrawalFixture)
           )
           retrieved <- response.as[String]
         } yield {
           response.status shouldBe Status.UnprocessableEntity
-          retrieved shouldBe "Withdrawl exceeds balance"
+          retrieved shouldBe "Withdrawal exceeds balance"
         }
       }
     }
@@ -82,7 +82,7 @@ class TransactionRoutesSpec extends AsyncFreeSpec with AsyncIOSpec with Matchers
           la <- LiveAccount[IO](xa)
           route = TransactionRoutes[IO](la, lt, xa)
           response <- route.routes.orNotFound.run(
-            Request(method = Method.POST, uri = uri"/transaction").withEntity(withdrawlFixture.copy(accountId = 789))
+            Request(method = Method.POST, uri = uri"/transaction").withEntity(withdrawalFixture.copy(accountId = 789))
           )
           retrieved <- response.as[String]
         } yield {

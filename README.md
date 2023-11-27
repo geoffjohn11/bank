@@ -87,3 +87,4 @@ with body payload
 ```
 
 * command ```sbt test``` executes the tests, which spin up a PostgreSQLContainer testing container
+* to create a container of the app run ```sbt stagingBuild / Docker / publishLocal```

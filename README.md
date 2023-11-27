@@ -31,7 +31,7 @@ balance of an account happens as a single database transaction.
 	"balance": 300
 }
 ```
-* a transaction can be executed against account 44 with the http POST
+* a transaction to withdraw 200 can be executed against account 44 with the http POST
 http://localhost:8080/directbooks/transaction with a body payload
 ```json
 {
